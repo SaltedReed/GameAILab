@@ -23,7 +23,7 @@ namespace GameAILab.Sandbox
 
         public override void Stop()
         {
-            if (m_navAgent.isStopped)
+            if (!m_navAgent.isActiveAndEnabled || m_navAgent.isStopped)
                 return;
 
             m_navAgent.isStopped = true;

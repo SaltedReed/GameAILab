@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace GameAILab.Decision.FSM
 {
-
-    public abstract class State<T>
+    public abstract class State
     {
         public string Name { get; protected set; }
-        public T Owner { get; set; }
+        public GameObject Owner { get; set; }
 
         public State(string name)
         {
@@ -19,19 +19,19 @@ namespace GameAILab.Decision.FSM
             Name = name;
         }
 
-        public virtual void OnEnter() { UnityEngine.Debug.Log("enter " + Name); }
+        public virtual void OnEnter() { }
         public abstract string OnUpdate();
-        public virtual void OnExit() { UnityEngine.Debug.Log("exit " + Name); }
+        public virtual void OnExit() { }
     }
 
 
-    public class StateMachine<T> : State<T>
+    public class StateMachine : State
     {
-        public State<T> CurrentState { get; protected set; }
+        public State CurrentState { get; protected set; }
 
-        protected Dictionary<string, State<T>> m_states = new Dictionary<string, State<T>>();
+        protected Dictionary<string, State> m_states = new Dictionary<string, State>();
 
-        public StateMachine(string name, T owner, State<T> defaultState)
+        public StateMachine(string name, GameObject owner, State defaultState)
             : base(name)
         {
             Owner = owner;
@@ -42,16 +42,18 @@ namespace GameAILab.Decision.FSM
             }
         }
 
-        public void SetDefaultState(State<T> state)
+        #region State Management
+
+        public void SetDefaultState(State state)
         {
             if (state != null)
             {
                 AddState(state);
-                ChangeState(state);
+                CurrentState = state;
             }
         }
 
-        public bool AddState(State<T> state)
+        public bool AddState(State state)
         {
             if (state is null)
             {
@@ -60,7 +62,7 @@ namespace GameAILab.Decision.FSM
             if (string.IsNullOrEmpty(state.Name))
             {
                 throw new ArgumentException("state name cannot be null or empty");
-            }            
+            }
             if (m_states.ContainsKey(state.Name))
             {
                 throw new Exception($"fsm already contains state {state.Name}");
@@ -71,7 +73,7 @@ namespace GameAILab.Decision.FSM
             return true;
         }
 
-        public void RemoveState(State<T> state)
+        public void RemoveState(State state)
         {
             if (state != null)
             {
@@ -84,7 +86,7 @@ namespace GameAILab.Decision.FSM
             m_states.Remove(name);
         }
 
-        public void ChangeState(State<T> state)
+        public void ChangeState(State state)
         {
             CurrentState?.OnExit();
             CurrentState = state;
@@ -93,7 +95,7 @@ namespace GameAILab.Decision.FSM
 
         public void ChangeStateByName(string name)
         {
-            State<T> state;
+            State state;
             if (m_states.TryGetValue(name, out state))
             {
                 ChangeState(state);
@@ -102,6 +104,24 @@ namespace GameAILab.Decision.FSM
             {
                 throw new Exception("invalid state name");
             }
+        }
+
+        #endregion
+
+
+        public void Start()
+        {
+            if (CurrentState is null)
+            {
+                Debug.LogWarning($"{Name} does not have a default state");
+            }
+
+            CurrentState?.OnEnter();
+        }
+
+        public void Shutdown()
+        {
+            CurrentState?.OnExit();
         }
 
         public override string OnUpdate()
@@ -118,10 +138,6 @@ namespace GameAILab.Decision.FSM
             return Name;
         }
 
-        public void OnShutdown()
-        {
-            ChangeState(null);
-        }
     }
 
 }

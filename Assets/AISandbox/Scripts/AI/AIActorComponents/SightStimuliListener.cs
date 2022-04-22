@@ -8,6 +8,8 @@ namespace GameAILab.Sandbox
 
     public abstract class SightStimuliListener : MonoBehaviour, ISightStimuliListener
     {
+        public bool registerOnPawn = true;
+
         public virtual GameObject Go { get => gameObject; set { } }
 
         public virtual AffiliationType TargetAffiliations { get => m_targetAffiliation; set => m_targetAffiliation = value; }
@@ -26,7 +28,22 @@ namespace GameAILab.Sandbox
         [SerializeField]
         protected float m_height = 2;
 
+
         public abstract void OnSenseUpdate(Stimuli stimuli);
+
+
+        protected virtual void Start()
+        {
+            if (registerOnPawn)
+            {
+                Game.Instance.AISys.RegisterSightStimuliListener(this);
+            }
+        }
+
+        protected virtual void OnDestroy()
+        {
+            Game.Instance.AISys.UnregisterSightStimuliListener(this);
+        }
 
         protected virtual void OnDrawGizmos()
         {

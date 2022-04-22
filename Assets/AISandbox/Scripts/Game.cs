@@ -12,7 +12,8 @@ namespace GameAILab.Sandbox
         {
             base.Awake();
 
-            ActorSys = new ActorSystem();            
+            ActorSys = new ActorSystem();  
+            
             AISys = new AISystem();
             AISys.PreInit();
         }
@@ -20,6 +21,11 @@ namespace GameAILab.Sandbox
         protected virtual void Update()
         {
             AISys.Tick();
+        }
+
+        protected virtual void OnDestroy()
+        {
+            AISys.Shutdown();
         }
     }
 

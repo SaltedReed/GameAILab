@@ -20,7 +20,7 @@ namespace GameAILab.Sandbox
         [HideInInspector]
         public Vector3[] patrolPath;
         protected int m_targetPatrolNode = -1;
-        protected bool m_isStopped = false;
+        protected bool m_isStopped = true;
 
         private void OnGUI()
         {
@@ -103,11 +103,13 @@ namespace GameAILab.Sandbox
             m_motor.MoveTo(target);
         }
 
-        protected void Start()
+        protected void Awake()
         {
             BuildUpPath();
+        }
 
-            m_isStopped = !startOnPawn;
+        protected void Start()
+        {
             if (startOnPawn)
             {
                 RestartPatrol();

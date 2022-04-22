@@ -13,10 +13,21 @@ namespace GameAILab.Sandbox
         [SerializeField]
         protected AffiliationType m_affiliation;
 
+
+        protected virtual void Awake()
+        {
+
+        }
+
         protected virtual void Start()
         {
             ActorSystem actorSystem = Game.Instance.ActorSys;
             actorSystem.Register(this);
+        }
+
+        protected virtual void Update()
+        {
+
         }
 
         protected virtual void OnDestroy()

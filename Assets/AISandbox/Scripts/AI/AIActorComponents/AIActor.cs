@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using GameAILab.Core;
 
 
 namespace GameAILab.Sandbox
@@ -6,6 +7,8 @@ namespace GameAILab.Sandbox
 
     public class AIActor : Actor
     {
+        public virtual IActor Target { get; set; }
+
         public virtual Vector3 BattlePoint
         {
             get => m_battlePoint;
@@ -13,8 +16,7 @@ namespace GameAILab.Sandbox
         }
         protected Vector3 m_battlePoint;
 
-        public Animator AnimController => m_animator;
-        protected Animator m_animator;
+        public AISquad Squad { get; set; }
 
 
         private void OnDrawGizmos()
