@@ -13,12 +13,19 @@ namespace GameAILab.Sandbox
 
         public override void OnAIUpdate(StateMachine fsm)
         {
-            throw new System.NotImplementedException();
+            
         }
 
         protected override StateMachine BuildUpFsm()
         {
-            throw new System.NotImplementedException();
+            AISquad squad = GetComponent<AISquad>();
+
+            StateMachineBuilder builder = new StateMachineBuilder();
+            StateMachine fsm = builder.StateMachine("aisquad fsm", gameObject)
+                                          .DefaultState(new SquadRelaxedState(stateName_relaxed, squad))
+                                          .State(new SquadCombatState(stateName_combat, squad))
+                                      .EndStateMachine();
+            return fsm;
         }
     }
 

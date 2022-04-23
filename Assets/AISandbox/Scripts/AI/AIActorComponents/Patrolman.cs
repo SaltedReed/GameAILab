@@ -7,28 +7,23 @@ namespace GameAILab.Sandbox
     public class Patrolman : MonoBehaviour
     {
         [Header("Patrol")]
-        // do not exist at runtime
         [SerializeField]
+        // does not exist at runtime
         protected GameObject[] patrolNodeGos;
         public float speed = 3.5f;
         public float reachRadius = 0.1f;
         [SerializeField]
-        //protected NavMeshAgent m_navAgent;
         protected Motor m_motor;
         public bool startOnPawn = true;
+        [Header("Debug")]
+        public Color dbg_pathNodeClr = Color.white;
 
+        public Motor Movement => m_motor;
         [HideInInspector]
         public Vector3[] patrolPath;
-        protected int m_targetPatrolNode = -1;
-        protected bool m_isStopped = true;
 
-        private void OnGUI()
-        {
-            if (GUILayout.Button("start"))
-                RestartPatrol();
-            if (GUILayout.Button("stop"))
-                StopPatrol();
-        }
+        protected int m_targetPatrolNode = -1;
+        protected bool m_isStopped = true; // todo: better solution of stopping
 
         public void BuildUpPath()
         {
@@ -125,7 +120,7 @@ namespace GameAILab.Sandbox
         {
             if (patrolPath != null)
             {
-                Gizmos.color = Color.green;
+                Gizmos.color = dbg_pathNodeClr;
 
                 for (int i = 0; i < patrolPath.Length; ++i)
                 {

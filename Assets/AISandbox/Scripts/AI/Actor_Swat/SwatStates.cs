@@ -47,6 +47,14 @@ namespace GameAILab.Sandbox
 
         public override string OnUpdate()
         {
+            if (OwnerActor.Target != null)
+            {
+                if (OwnerActor.Movement.IsAt(OwnerActor.BattlePoint))
+                    return Owner.GetComponent<SwatFsmOwner>().stateName_aim;
+                else
+                    return Owner.GetComponent<SwatFsmOwner>().stateName_combatMoveTo;
+            }
+
             return Name;
         }
 
@@ -56,6 +64,7 @@ namespace GameAILab.Sandbox
 
             OwnerActor.Patrol.StopPatrol();
         }
+
     }
 
     public class CombatMoveToState : SwatState
@@ -74,12 +83,19 @@ namespace GameAILab.Sandbox
 
         public override string OnUpdate()
         {
+            if (OwnerActor.Target is null)
+                return Owner.GetComponent<SwatFsmOwner>().stateName_patrol;
             if (OwnerActor.Movement.IsAt(OwnerActor.BattlePoint))
                 return Owner.GetComponent<SwatFsmOwner>().stateName_aim;
+
+            if (OwnerActor.IsBattlePointDirty)
+                OwnerActor.MoveToBattlePoint();
+
             return Name;
         }
 
     }
+
 
     public class AimState : SwatState
     {
@@ -96,6 +112,13 @@ namespace GameAILab.Sandbox
 
         public override string OnUpdate()
         {
+            if (OwnerActor.Target is null)
+                return Owner.GetComponent<SwatFsmOwner>().stateName_patrol;
+            else if (OwnerActor.IsBattlePointDirty)
+                return Owner.GetComponent<SwatFsmOwner>().stateName_combatMoveTo;
+
+            Owner.transform.LookAt(OwnerActor.Target.Go.transform.position);
+
             return Name;
         }
 

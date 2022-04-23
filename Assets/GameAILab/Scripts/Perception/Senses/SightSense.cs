@@ -135,7 +135,7 @@ namespace GameAILab.Perception
             Vector3 lsnPos = sightLsn.Go.transform.position;
             Vector3 srcPos = source.Position;
             float ydst = srcPos.y - lsnPos.y;
-            if (ydst > sightLsn.Height || ydst < 0)
+            if (ydst > sightLsn.Height || ydst < -1) // todo: parameterize lowerHeight
                 return false;
 
             float dst = (lsnPos - srcPos).magnitude; // temp

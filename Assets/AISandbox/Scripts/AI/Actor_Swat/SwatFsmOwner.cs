@@ -14,21 +14,7 @@ namespace GameAILab.Sandbox
 
         public override void OnAIUpdate(StateMachine fsm)
         {
-            ASwat owner = fsm.Owner.GetComponent<ASwat>();
-            if (owner is null)
-            {
-                Debug.LogError("no ASwat script attach to fsm.Owner");
-                return;
-            }
 
-            if (owner.IsBattlePointDirty && owner.Target != null)
-            {
-                fsm.ChangeStateByName(/*owner.*/stateName_combatMoveTo);
-            }
-            else if (owner.Target is null && fsm.CurrentState.Name != /*owner.*/stateName_patrol)
-            {
-                fsm.ChangeStateByName(/*owner.*/stateName_patrol);
-            }
         }
 
         protected override StateMachine BuildUpFsm()

@@ -18,4 +18,10 @@ public class Player : Actor
         base.OnDestroy();
         Game.Instance.AISys.UnregisterSightStimuliSource(this);
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawRay(transform.position, transform.forward * 5);
+    }
 }

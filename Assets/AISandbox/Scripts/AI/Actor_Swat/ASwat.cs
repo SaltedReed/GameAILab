@@ -57,24 +57,6 @@ namespace GameAILab.Sandbox
             gameObject.AddComponent<SwatFsmOwner>();
         }
 
-        // test
-        protected override void Update()
-        {
-            base.Update();
-
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                Anim.SetBool(animKey_moving, true);
-                Anim.SetBool(animKey_combat, false);
-                GetComponent<Patrolman>().RestartPatrol();
-            }
-            if (Input.GetKeyDown(KeyCode.B))
-            {
-                Debug.Log("B");
-                BattlePoint = Vector3.zero;
-            }
-        }
-
     }
 
 }

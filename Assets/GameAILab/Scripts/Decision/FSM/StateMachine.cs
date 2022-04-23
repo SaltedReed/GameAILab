@@ -88,6 +88,9 @@ namespace GameAILab.Decision.FSM
 
         public void ChangeState(State state)
         {
+            if (CurrentState != null && CurrentState.Name == state.Name)
+                return;
+
             CurrentState?.OnExit();
             CurrentState = state;
             CurrentState?.OnEnter();

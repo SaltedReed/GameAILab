@@ -10,6 +10,9 @@ namespace GameAILab.Sandbox
     {
         public bool registerOnPawn = true;
 
+        [Header("Debug")]
+        public Color dbg_sightConeClr = Color.yellow;
+
         public virtual GameObject Go { get => gameObject; set { } }
 
         public virtual AffiliationType TargetAffiliations { get => m_targetAffiliation; set => m_targetAffiliation = value; }
@@ -48,7 +51,7 @@ namespace GameAILab.Sandbox
         protected virtual void OnDrawGizmos()
         {
             // sight cone ---------------------------
-            Gizmos.color = Color.yellow;
+            Gizmos.color = dbg_sightConeClr;
 
             Vector3 pos = transform.position;
             Vector3 left = Quaternion.AngleAxis(-HalfAngleDegrees, Vector3.up) * transform.forward;
